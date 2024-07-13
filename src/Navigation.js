@@ -24,7 +24,7 @@ const Navigation = () => {
             <NavDropdown
               title={
                 <>
-                  <SettingOutlined /> Hi {"Current User"}
+                  <SettingOutlined /> Dashboard{" "}
                 </>
               }
               id="basic-nav-dropdown"
@@ -40,9 +40,7 @@ const Navigation = () => {
                 <EditMember />
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item
-                style={{ backgroundColor: "transparent", color: "#000" }}
-              >
+              <NavDropdown.Item>
                 <DeleteMember />
               </NavDropdown.Item>
             </NavDropdown>
