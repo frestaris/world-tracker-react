@@ -51,6 +51,7 @@ const AddMember = () => {
       <Button type="text" onClick={showModal}>
         <PlusOutlined className="text-success" /> Add Member
       </Button>
+
       <Modal
         title="Add Member"
         open={isModalVisible}
@@ -60,15 +61,20 @@ const AddMember = () => {
           <Button key="back" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button key="submit" type="primary" onClick={handleOk}>
-            Submit
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleOk}
+            style={{ backgroundColor: "#51a47e", borderColor: "#52c41a" }}
+          >
+            Add
           </Button>,
         ]}
       >
         <Form layout="vertical">
           <Form.Item label="Member Name" required>
             <Input
-              placeholder="Enter member name"
+              placeholder="Enter member name..."
               value={name}
               onChange={(e) => setName(e.target.value)}
             />

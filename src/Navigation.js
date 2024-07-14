@@ -9,12 +9,13 @@ import Search from "./Search";
 import AddMember from "./modal/AddMember";
 import EditMember from "./modal/EditMember";
 import DeleteMember from "./modal/DeleteMember";
+import SwitchMember from "./modal/SwitchMember";
 
 const Navigation = () => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary fixed-top">
       <Container>
-        <Navbar.Brand>World Tracker</Navbar.Brand>
+        <Navbar.Brand href="/">World Tracker - {"CURRENT USER"}</Navbar.Brand>{" "}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
@@ -39,8 +40,15 @@ const Navigation = () => {
               >
                 <EditMember />
               </NavDropdown.Item>
+              <NavDropdown.Item
+                style={{ backgroundColor: "transparent", color: "#000" }}
+              >
+                <SwitchMember />
+              </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>
+              <NavDropdown.Item
+                style={{ backgroundColor: "transparent", color: "#000" }}
+              >
                 <DeleteMember />
               </NavDropdown.Item>
             </NavDropdown>

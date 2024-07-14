@@ -1,12 +1,15 @@
 import React from "react";
 import Map from "./Map";
 import Navigation from "./Navigation";
+import { BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   return (
     <div>
-      <Navigation />
-      <Map />
+      <Router>
+        <Navigation />
+        <Map />
+      </Router>
     </div>
   );
 }

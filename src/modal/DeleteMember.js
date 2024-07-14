@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Select, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -8,11 +9,13 @@ const DeleteMember = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
     setUsers(storedUsers);
   }, []);
+
   useEffect(() => {
     loadUsers();
   }, []);
@@ -29,6 +32,7 @@ const DeleteMember = () => {
   const handleOk = () => {
     deleteUser();
     setIsModalVisible(false);
+    navigate("/");
   };
 
   const handleCancel = () => {
@@ -66,7 +70,7 @@ const DeleteMember = () => {
         ]}
       >
         <Form layout="vertical">
-          <Form.Item label="Select Member" required>
+          <Form.Item>
             <Select
               placeholder="Select a member..."
               value={selectedUserIndex}

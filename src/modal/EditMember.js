@@ -89,8 +89,13 @@ const EditMember = () => {
           <Button key="back" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button key="submit" type="primary" onClick={handleOk}>
-            Save
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleOk}
+            style={{ backgroundColor: "#faad14", borderColor: "#faad14" }}
+          >
+            Edit
           </Button>,
         ]}
       >
