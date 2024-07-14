@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -17,10 +18,11 @@ const colorOptions = [
   { value: "Pink", color: "#e03997" },
 ];
 
-const AddMember = () => {
+const AddMember = ({ onSelectUser }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [name, setName] = useState("");
   const [color, setColor] = useState("");
+  const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -44,6 +46,10 @@ const AddMember = () => {
     setName("");
     setColor("");
     message.success("Member added successfully.");
+    if (onSelectUser) {
+      onSelectUser(user.name, color);
+    }
+    navigate(`/${user.name}`);
   };
 
   return (

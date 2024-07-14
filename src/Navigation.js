@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -10,12 +10,22 @@ import AddMember from "./modal/AddMember";
 import EditMember from "./modal/EditMember";
 import DeleteMember from "./modal/DeleteMember";
 import SwitchMember from "./modal/SwitchMember";
+import User from "./modal/User";
 
 const Navigation = () => {
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUserColor, setSelectedUserColor] = useState("");
+
+  const handleSelectUser = (user, color) => {
+    setSelectedUser(user);
+    setSelectedUserColor(color);
+  };
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary fixed-top">
       <Container>
-        <Navbar.Brand href="/">World Tracker - {"CURRENT USER"}</Navbar.Brand>{" "}
+        <Navbar.Brand href="/">World Tracker</Navbar.Brand>
+        <User selectedUser={selectedUser} color={selectedUserColor} />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
@@ -33,23 +43,23 @@ const Navigation = () => {
               <NavDropdown.Item
                 style={{ backgroundColor: "transparent", color: "#000" }}
               >
-                <AddMember />
+                <AddMember onSelectUser={handleSelectUser} />
               </NavDropdown.Item>
               <NavDropdown.Item
                 style={{ backgroundColor: "transparent", color: "#000" }}
               >
-                <EditMember />
+                <EditMember onSelectUser={handleSelectUser} />
               </NavDropdown.Item>
               <NavDropdown.Item
                 style={{ backgroundColor: "transparent", color: "#000" }}
               >
-                <SwitchMember />
+                <SwitchMember onSelectUser={handleSelectUser} />
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
                 style={{ backgroundColor: "transparent", color: "#000" }}
               >
-                <DeleteMember />
+                <DeleteMember onSelectUser={handleSelectUser} />
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>

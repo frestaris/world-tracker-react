@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
-const DeleteMember = () => {
+const DeleteMember = ({ onSelectUser }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
@@ -47,6 +47,9 @@ const DeleteMember = () => {
       setUsers(updatedUsers);
       setSelectedUserIndex(null);
       message.success("Member deleted successfully.");
+      if (onSelectUser) {
+        onSelectUser("");
+      }
     }
   };
 

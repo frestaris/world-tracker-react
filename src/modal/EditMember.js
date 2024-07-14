@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Select, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -17,12 +18,13 @@ const colorOptions = [
   { value: "Pink", color: "#e03997" },
 ];
 
-const EditMember = () => {
+const EditMember = ({ onSelectUser }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
   const [name, setName] = useState("");
   const [color, setColor] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadUsers();
@@ -68,10 +70,15 @@ const EditMember = () => {
   const updateUser = () => {
     if (selectedUserIndex !== null) {
       const updatedUsers = [...users];
-      updatedUsers[selectedUserIndex] = { name, color };
+      const updatedUser = { name, color };
+      updatedUsers[selectedUserIndex] = updatedUser;
       localStorage.setItem("users", JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
       message.success("Member updated successfully.");
+      if (onSelectUser) {
+        onSelectUser(updatedUser.name, color);
+      }
+      navigate(`/${updatedUser.name}`);
     }
   };
 
@@ -102,7 +109,8 @@ const EditMember = () => {
         <Form layout="vertical">
           <Form.Item required>
             <Select
-              value={"Select a member..."}
+              placeholder="Select a member..."
+              value={selectedUserIndex}
               onChange={(value) => setSelectedUserIndex(value)}
             >
               {users.map((user, index) => (

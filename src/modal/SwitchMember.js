@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
-const SwitchMember = () => {
+const SwitchMember = ({ onSelectUser }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -34,11 +34,13 @@ const SwitchMember = () => {
     setSelectedUser(value);
     setIsModalVisible(false);
     if (value !== null && users[value]) {
-      navigate(`/${users[value].name}`);
+      const userName = users[value].name;
+      const userColor = users[value].color;
+      navigate(`/${userName}`);
       message.success("Member switched.");
+      onSelectUser(userName, userColor);
     }
   };
-  const modalFooter = null;
 
   return (
     <>
@@ -48,9 +50,9 @@ const SwitchMember = () => {
       <Modal
         title="Switch Member"
         open={isModalVisible}
-        onOk={handleOk}
+        onOk={() => handleOk(selectedUser)}
         onCancel={handleCancel}
-        footer={modalFooter}
+        footer={null}
       >
         <Form.Item label="Select Member">
           <Select
