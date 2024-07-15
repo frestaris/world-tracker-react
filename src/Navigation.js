@@ -15,17 +15,26 @@ import User from "./modal/User";
 const Navigation = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedUserColor, setSelectedUserColor] = useState("");
+  const [updateKey, setUpdateKey] = useState(0);
 
   const handleSelectUser = (user, color) => {
     setSelectedUser(user);
     setSelectedUserColor(color);
   };
 
+  const handleUpdateUser = () => {
+    setUpdateKey((prevKey) => prevKey + 1);
+  };
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary fixed-top">
       <Container>
         <Navbar.Brand href="/">World Tracker</Navbar.Brand>
-        <User selectedUser={selectedUser} color={selectedUserColor} />
+        <User
+          selectedUser={selectedUser}
+          color={selectedUserColor}
+          onUpdateUser={updateKey}
+        />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
@@ -48,7 +57,10 @@ const Navigation = () => {
               <NavDropdown.Item
                 style={{ backgroundColor: "transparent", color: "#000" }}
               >
-                <EditMember onSelectUser={handleSelectUser} />
+                <EditMember
+                  onSelectUser={handleSelectUser}
+                  onUpdateUser={handleUpdateUser}
+                />{" "}
               </NavDropdown.Item>
               <NavDropdown.Item
                 style={{ backgroundColor: "transparent", color: "#000" }}

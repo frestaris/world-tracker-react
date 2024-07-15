@@ -16,10 +16,6 @@ const DeleteMember = ({ onSelectUser }) => {
     setUsers(storedUsers);
   }, []);
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
   const loadUsers = () => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
     setUsers(storedUsers);

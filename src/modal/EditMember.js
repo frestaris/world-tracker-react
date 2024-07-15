@@ -18,17 +18,29 @@ const colorOptions = [
   { value: "Pink", color: "#e03997" },
 ];
 
-const EditMember = ({ onSelectUser }) => {
+const countryOptions = [
+  "United States",
+  "Canada",
+  "Mexico",
+  "United Kingdom",
+  "Germany",
+  "France",
+  "Italy",
+  "Spain",
+  "Australia",
+  "Japan",
+  "China",
+  "India",
+];
+
+const EditMember = ({ onSelectUser, onUpdateUser }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUserIndex, setSelectedUserIndex] = useState(null);
   const [name, setName] = useState("");
   const [color, setColor] = useState("");
+  const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
 
   const loadUsers = () => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
@@ -36,6 +48,7 @@ const EditMember = ({ onSelectUser }) => {
     setSelectedUserIndex(null); // Reset selected user index
     setName(""); // Reset name
     setColor(""); // Reset color
+    setCountries([]); // Reset countries
   };
 
   useEffect(() => {
@@ -44,6 +57,7 @@ const EditMember = ({ onSelectUser }) => {
       if (user) {
         setName(user.name);
         setColor(user.color);
+        setCountries(user.countries || []);
       }
     }
   }, [selectedUserIndex, users]);
@@ -51,11 +65,6 @@ const EditMember = ({ onSelectUser }) => {
   const showModal = () => {
     setIsModalVisible(true);
     loadUsers();
-    const user = users[selectedUserIndex];
-    if (user) {
-      setName(user.name);
-      setColor(user.color);
-    }
   };
 
   const handleOk = () => {
@@ -70,13 +79,16 @@ const EditMember = ({ onSelectUser }) => {
   const updateUser = () => {
     if (selectedUserIndex !== null) {
       const updatedUsers = [...users];
-      const updatedUser = { name, color };
+      const updatedUser = { name, color, countries };
       updatedUsers[selectedUserIndex] = updatedUser;
       localStorage.setItem("users", JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
       message.success("Member updated successfully.");
       if (onSelectUser) {
         onSelectUser(updatedUser.name, color);
+      }
+      if (onUpdateUser) {
+        onUpdateUser();
       }
       navigate(`/${updatedUser.name}`);
     }
@@ -149,6 +161,20 @@ const EditMember = ({ onSelectUser }) => {
                         />
                         {option.value}
                       </div>
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item label="Countries" required>
+                <Select
+                  mode="multiple"
+                  placeholder="Select countries..."
+                  value={countries}
+                  onChange={(value) => setCountries(value)}
+                >
+                  {countryOptions.map((country) => (
+                    <Option key={country} value={country}>
+                      {country}
                     </Option>
                   ))}
                 </Select>

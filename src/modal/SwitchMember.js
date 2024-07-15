@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form, Select, message } from "antd";
 import { UserSwitchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,6 @@ const SwitchMember = ({ onSelectUser }) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
 
   const loadUsers = () => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];

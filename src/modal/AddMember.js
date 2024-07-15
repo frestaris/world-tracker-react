@@ -18,10 +18,26 @@ const colorOptions = [
   { value: "Pink", color: "#e03997" },
 ];
 
+const countryOptions = [
+  "United States",
+  "Canada",
+  "Mexico",
+  "United Kingdom",
+  "Germany",
+  "France",
+  "Italy",
+  "Spain",
+  "Australia",
+  "Japan",
+  "China",
+  "India",
+];
+
 const AddMember = ({ onSelectUser }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [name, setName] = useState("");
   const [color, setColor] = useState("");
+  const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
 
   const showModal = () => {
@@ -38,13 +54,14 @@ const AddMember = ({ onSelectUser }) => {
   };
 
   const saveUser = () => {
-    const user = { name, color };
+    const user = { name, color, countries };
     const users = JSON.parse(localStorage.getItem("users")) || [];
     users.push(user);
     localStorage.setItem("users", JSON.stringify(users));
     // Optionally, you can reset the form fields here
     setName("");
     setColor("");
+    setCountries([]);
     message.success("Member added successfully.");
     if (onSelectUser) {
       onSelectUser(user.name, color);
@@ -105,6 +122,20 @@ const AddMember = ({ onSelectUser }) => {
                     />
                     {option.value}
                   </div>
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Countries" required>
+            <Select
+              mode="multiple"
+              placeholder="Select countries..."
+              value={countries}
+              onChange={(value) => setCountries(value)}
+            >
+              {countryOptions.map((country) => (
+                <Option key={country} value={country}>
+                  {country}
                 </Option>
               ))}
             </Select>

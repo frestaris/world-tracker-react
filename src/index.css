@@ -21,7 +21,6 @@ body {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
-  background-color: #90daee;
 
   position: relative;
   visibility: visible;
@@ -40,7 +39,7 @@ body {
   width: 100%;
   height: auto;
   max-height: 100%;
-  margin-left: 1rem;
+  background-color: #90daee;
 }
 .ag-canvas_svg path {
   fill: #679c86;
