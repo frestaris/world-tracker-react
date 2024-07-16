@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Select, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { countriesData } from "../data";
 
 const { Option } = Select;
 
@@ -16,21 +17,6 @@ const colorOptions = [
   { value: "Violet", color: "#6435c9" },
   { value: "Purple", color: "#a333c8" },
   { value: "Pink", color: "#e03997" },
-];
-
-const countryOptions = [
-  "United States",
-  "Canada",
-  "Mexico",
-  "United Kingdom",
-  "Germany",
-  "France",
-  "Italy",
-  "Spain",
-  "Australia",
-  "Japan",
-  "China",
-  "India",
 ];
 
 const EditMember = ({ onSelectUser, onUpdateUser }) => {
@@ -172,9 +158,16 @@ const EditMember = ({ onSelectUser, onUpdateUser }) => {
                   value={countries}
                   onChange={(value) => setCountries(value)}
                 >
-                  {countryOptions.map((country) => (
-                    <Option key={country} value={country}>
-                      {country}
+                  {countriesData.map((country) => (
+                    <Option key={country.title} value={country.title}>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <span
+                          style={{
+                            backgroundColor: "#ccc",
+                          }}
+                        />
+                        {country.title}
+                      </div>
                     </Option>
                   ))}
                 </Select>

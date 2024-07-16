@@ -6,24 +6,25 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SettingOutlined } from "@ant-design/icons";
 import Search from "./Search";
-import AddMember from "./modal/AddMember";
-import EditMember from "./modal/EditMember";
-import DeleteMember from "./modal/DeleteMember";
-import SwitchMember from "./modal/SwitchMember";
-import User from "./modal/User";
+import AddMember from "../modal/AddMember";
+import EditMember from "../modal/EditMember";
+import DeleteMember from "../modal/DeleteMember";
+import SwitchMember from "../modal/SwitchMember";
+import User from "../modal/User";
 
 const Navigation = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedUserColor, setSelectedUserColor] = useState("");
-  const [updateKey, setUpdateKey] = useState(0);
+  const [selectedUserCountries, setSelectedUserCountries] = useState(0);
 
-  const handleSelectUser = (user, color) => {
+  const handleSelectUser = (user, color, countries) => {
     setSelectedUser(user);
     setSelectedUserColor(color);
+    setSelectedUserCountries(countries);
   };
 
   const handleUpdateUser = () => {
-    setUpdateKey((prevKey) => prevKey + 1);
+    setSelectedUserCountries((prevKey) => prevKey + 1);
   };
 
   return (
@@ -33,7 +34,7 @@ const Navigation = () => {
         <User
           selectedUser={selectedUser}
           color={selectedUserColor}
-          onUpdateUser={updateKey}
+          onUpdateUser={selectedUserCountries}
         />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
