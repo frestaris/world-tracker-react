@@ -26,9 +26,13 @@ const DeleteMember = ({ onSelectUser }) => {
   };
 
   const handleOk = () => {
-    deleteUser();
-    setIsModalVisible(false);
-    navigate("/");
+    if (selectedUserIndex !== null && selectedUserIndex !== undefined) {
+      deleteUser();
+      setIsModalVisible(false);
+      navigate("/");
+    } else {
+      message.error("Please select a member to delete.");
+    }
   };
 
   const handleCancel = () => {
@@ -36,16 +40,21 @@ const DeleteMember = ({ onSelectUser }) => {
   };
 
   const deleteUser = () => {
-    if (selectedUserIndex !== null) {
+    if (selectedUserIndex !== null && selectedUserIndex !== undefined) {
       const updatedUsers = [...users];
       updatedUsers.splice(selectedUserIndex, 1);
       localStorage.setItem("users", JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
       setSelectedUserIndex(null);
       message.success("Member deleted successfully.");
+
+      // Notify parent component of deletion
       if (onSelectUser) {
-        onSelectUser("");
+        // Send empty values or notify as per your application logic
+        onSelectUser("", "", []); // Example: Clear selected user details
       }
+    } else {
+      message.error("Please select a member to delete.");
     }
   };
 

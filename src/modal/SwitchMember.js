@@ -32,9 +32,12 @@ const SwitchMember = ({ onSelectUser }) => {
     if (value !== null && users[value]) {
       const userName = users[value].name;
       const userColor = users[value].color;
+      const userCountries = users[value].countries;
+
       navigate(`/${userName}`);
       message.success("Member switched.");
-      onSelectUser(userName, userColor);
+      onSelectUser(userName, userColor, userCountries);
+      console.log(userName, userColor, userCountries);
     }
   };
 

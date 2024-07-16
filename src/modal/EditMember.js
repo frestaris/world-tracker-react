@@ -63,15 +63,16 @@ const EditMember = ({ onSelectUser, onUpdateUser }) => {
   };
 
   const updateUser = () => {
+    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
     if (selectedUserIndex !== null) {
       const updatedUsers = [...users];
-      const updatedUser = { name, color, countries };
+      const updatedUser = { name: capitalizedName, color, countries };
       updatedUsers[selectedUserIndex] = updatedUser;
       localStorage.setItem("users", JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
       message.success("Member updated successfully.");
       if (onSelectUser) {
-        onSelectUser(updatedUser.name, color);
+        onSelectUser(updatedUser.name, color, countries);
       }
       if (onUpdateUser) {
         onUpdateUser();

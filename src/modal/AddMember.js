@@ -31,8 +31,12 @@ const AddMember = ({ onSelectUser }) => {
   };
 
   const handleOk = () => {
-    saveUser();
-    setIsModalVisible(false);
+    if (name && color && countries.length > 0) {
+      saveUser();
+      setIsModalVisible(false);
+    } else {
+      message.error("Please fill out all required fields.");
+    }
   };
 
   const handleCancel = () => {
@@ -40,20 +44,19 @@ const AddMember = ({ onSelectUser }) => {
   };
 
   const saveUser = () => {
-    const user = { name, color, countries };
+    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1); // Capitalize first letter
+    const user = { name: capitalizedName, color, countries };
     const users = JSON.parse(localStorage.getItem("users")) || [];
     users.push(user);
     localStorage.setItem("users", JSON.stringify(users));
-    // Optionally, you can reset the form fields here
-    setName("");
+    setName(""); // Reset name input
     setColor("");
     setCountries([]);
     message.success("Member added successfully.");
     if (onSelectUser) {
-      onSelectUser(user.name, color);
+      onSelectUser(capitalizedName, color, countries);
     }
-    navigate(`/${user.name}`);
-    console.log(user);
+    navigate(`/${capitalizedName}`);
   };
 
   return (
