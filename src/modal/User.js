@@ -3,23 +3,24 @@ import { Dropdown } from "react-bootstrap";
 import { Badge, message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
-const User = ({ selectedUser, color, countries: selectedUserCountries }) => {
+const User = ({
+  selectedUser,
+  color,
+  countries: selectedUserCountries,
+  onUpdateCountries,
+}) => {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    const loadUserCountries = () => {
-      if (selectedUser) {
-        const users = JSON.parse(localStorage.getItem("users")) || [];
-        const user = users.find((user) => user.name === selectedUser);
-        if (user && user.countries) {
-          setCountries(user.countries);
-        } else {
-          setCountries([]);
-        }
+    if (selectedUser) {
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const user = users.find((user) => user.name === selectedUser);
+      if (user && user.countries) {
+        setCountries(user.countries);
+      } else {
+        setCountries([]);
       }
-    };
-
-    loadUserCountries();
+    }
   }, [selectedUser]);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const User = ({ selectedUser, color, countries: selectedUserCountries }) => {
     );
     updateLocalStorageCountries(selectedUser, updatedCountries);
     setCountries(updatedCountries);
+    onUpdateCountries(updatedCountries); // Notify parent component
     message.success(`${countryToDelete} deleted successfully.`);
   };
 
@@ -59,7 +61,7 @@ const User = ({ selectedUser, color, countries: selectedUserCountries }) => {
 
   return (
     <div>
-      {selectedUser ? (
+      {selectedUser && countries.length > 0 ? (
         <Dropdown>
           <Dropdown.Toggle style={userStyle} id="dropdown-basic" as="span">
             <Badge
@@ -87,7 +89,9 @@ const User = ({ selectedUser, color, countries: selectedUserCountries }) => {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-      ) : null}
+      ) : (
+        <span style={userStyle}>{selectedUser}</span>
+      )}
     </div>
   );
 };

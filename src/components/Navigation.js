@@ -24,6 +24,7 @@ const Navigation = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [countryToAdd, setCountryToAdd] = useState("");
   const [modalAction, setModalAction] = useState("add");
+  const [mapKey, setMapKey] = useState(0); // Key to force re-render of SVG map
 
   const handleSelectUser = (user, color, countries) => {
     setSelectedUser(user);
@@ -62,6 +63,8 @@ const Navigation = () => {
     setSelectedUserCountries(updatedCountries);
     updateLocalStorageCountries(selectedUser, updatedCountries);
     message.success(`${countryToAdd} added successfully.`);
+    // Force re-render of SVG map by updating the key
+    setMapKey(mapKey + 1);
   };
 
   const handleDeleteCountry = (countryToDelete) => {
@@ -71,6 +74,8 @@ const Navigation = () => {
     setSelectedUserCountries(updatedCountries);
     updateLocalStorageCountries(selectedUser, updatedCountries);
     message.success(`${countryToDelete} removed successfully.`);
+    // Force re-render of SVG map by updating the key
+    setMapKey(mapKey + 1);
   };
 
   const updateLocalStorageCountries = (userName, updatedCountries) => {
@@ -97,6 +102,7 @@ const Navigation = () => {
             selectedUser={selectedUser}
             color={selectedUserColor}
             countries={selectedUserCountries}
+            onUpdateCountries={setSelectedUserCountries} // Pass the setter function
             onUpdateUser={handleUpdateUser}
           />
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -136,7 +142,12 @@ const Navigation = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <svg className="ag-canvas_svg" version="1.1" viewBox="0 0 1008 651">
+      <svg
+        className="ag-canvas_svg"
+        key={mapKey} // Key to force re-render of SVG map
+        version="1.1"
+        viewBox="0 0 1008 651"
+      >
         {countriesData.map((country) => (
           <path
             key={country.id}
@@ -150,7 +161,11 @@ const Navigation = () => {
       </svg>
 
       {/* Confirmation Modal */}
-      <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
+      <Modal
+        show={showConfirmation}
+        onHide={() => setShowConfirmation(false)}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>
             {modalAction === "add"
