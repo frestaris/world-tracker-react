@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import { Badge } from "antd";
 
-const User = ({ selectedUser, color, onUpdateUser }) => {
+const User = ({
+  selectedUser,
+  color,
+  onUpdateUser,
+  countries: selectedUserCountries,
+}) => {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
@@ -19,7 +24,12 @@ const User = ({ selectedUser, color, onUpdateUser }) => {
     };
 
     loadUserCountries();
-  }, [selectedUser, onUpdateUser]);
+  }, [selectedUser]);
+
+  useEffect(() => {
+    // Update countries when selectedUserCountries change
+    setCountries(selectedUserCountries);
+  }, [selectedUserCountries]);
 
   const userStyle = {
     color: "white",

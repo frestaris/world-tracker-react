@@ -3,6 +3,8 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SettingOutlined } from "@ant-design/icons";
 
@@ -18,6 +20,8 @@ const Navigation = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedUserColor, setSelectedUserColor] = useState("");
   const [selectedUserCountries, setSelectedUserCountries] = useState([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [countryToAdd, setCountryToAdd] = useState("");
 
   const handleSelectUser = (user, color, countries) => {
     setSelectedUser(user);
@@ -31,8 +35,32 @@ const Navigation = () => {
   };
 
   const handleClick = (title) => {
-    console.log("Clicked country:", title);
-    // Perform additional logic if needed
+    setCountryToAdd(title);
+    setShowConfirmation(true);
+  };
+
+  const addCountryToUser = () => {
+    const updatedCountries = [...selectedUserCountries, countryToAdd];
+    setSelectedUserCountries(updatedCountries);
+    localStorage.setItem(
+      "users",
+      JSON.stringify(
+        updateUserCountriesInLocalStorage(selectedUser, updatedCountries)
+      )
+    );
+    setShowConfirmation(false);
+  };
+
+  const updateUserCountriesInLocalStorage = (userName, updatedCountries) => {
+    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const updatedUsers = storedUsers.map((user) => {
+      if (user.name === userName) {
+        return { ...user, countries: updatedCountries };
+      }
+      return user;
+    });
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+    return updatedUsers;
   };
 
   const getCountryStyle = (title) => {
@@ -72,10 +100,7 @@ const Navigation = () => {
                 <NavDropdown.Item
                   style={{ backgroundColor: "transparent", color: "#000" }}
                 >
-                  <EditMember
-                    onSelectUser={handleSelectUser}
-                    // onUpdateUser={handleUpdateUser}
-                  />
+                  <EditMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
                 <NavDropdown.Item
                   style={{ backgroundColor: "transparent", color: "#000" }}
@@ -105,6 +130,27 @@ const Navigation = () => {
           />
         ))}
       </svg>
+
+      {/* Confirmation Modal */}
+      <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Country Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Do you want to add {countryToAdd} to your country list?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={addCountryToUser}>
+            Add
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

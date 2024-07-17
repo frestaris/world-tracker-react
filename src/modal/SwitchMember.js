@@ -37,7 +37,6 @@ const SwitchMember = ({ onSelectUser }) => {
       navigate(`/${userName}`);
       message.success("Member switched.");
       onSelectUser(userName, userColor, userCountries);
-      console.log(userName, userColor, userCountries);
     }
   };
 
