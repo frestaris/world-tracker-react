@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
+import { Badge } from "antd";
 
 const User = ({ selectedUser, color, onUpdateUser }) => {
   const [countries, setCountries] = useState([]);
@@ -21,10 +22,15 @@ const User = ({ selectedUser, color, onUpdateUser }) => {
   }, [selectedUser, onUpdateUser]);
 
   const userStyle = {
+    color: "white",
     backgroundColor: color,
     padding: "5px 10px",
     borderRadius: "5px",
     cursor: "pointer",
+  };
+  const badgeStyle = {
+    backgroundColor: "#0F67B1",
+    color: "#fff",
   };
 
   return (
@@ -32,11 +38,19 @@ const User = ({ selectedUser, color, onUpdateUser }) => {
       {selectedUser ? (
         <Dropdown>
           <Dropdown.Toggle style={userStyle} id="dropdown-basic" as="span">
-            {selectedUser}
+            <Badge
+              count={countries.length}
+              offset={[23, -8]}
+              style={badgeStyle}
+            >
+              <span style={userStyle}>{selectedUser}</span>
+            </Badge>
           </Dropdown.Toggle>
-          <Dropdown.Menu>
+          <Dropdown.Menu style={{ maxHeight: "200px", overflowY: "auto" }}>
             {countries.map((country, index) => (
-              <Dropdown.Item key={index}>{country}</Dropdown.Item>
+              <li className="p-1" key={index}>
+                {country}
+              </li>
             ))}
           </Dropdown.Menu>
         </Dropdown>

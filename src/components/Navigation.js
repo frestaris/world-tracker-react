@@ -25,11 +25,13 @@ const Navigation = () => {
     setSelectedUserCountries(countries);
   };
 
+  const handleUpdateUser = () => {
+    // Trigger a re-render for the User component
+    handleSelectUser(selectedUser, selectedUserColor, selectedUserCountries);
+  };
+
   const handleClick = (title) => {
     console.log("Clicked country:", title);
-    console.log("Selected User:", selectedUser);
-    console.log("User Color:", selectedUserColor);
-    console.log("User Countries:", selectedUserCountries);
     // Perform additional logic if needed
   };
 
@@ -37,7 +39,7 @@ const Navigation = () => {
     // Check if the country belongs to the selected user
     return selectedUserCountries.includes(title)
       ? { fill: selectedUserColor, cursor: "pointer" }
-      : { cursor: "pointer" }; // Default color for other countries
+      : { cursor: "pointer" };
   };
 
   return (
@@ -49,6 +51,7 @@ const Navigation = () => {
             selectedUser={selectedUser}
             color={selectedUserColor}
             countries={selectedUserCountries}
+            onUpdateUser={handleUpdateUser}
           />
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -61,20 +64,28 @@ const Navigation = () => {
                 }
                 id="basic-nav-dropdown"
               >
-                <NavDropdown.Item>
+                <NavDropdown.Item
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                >
                   <AddMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
-                <NavDropdown.Item>
+                <NavDropdown.Item
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                >
                   <EditMember
                     onSelectUser={handleSelectUser}
                     // onUpdateUser={handleUpdateUser}
                   />
                 </NavDropdown.Item>
-                <NavDropdown.Item>
+                <NavDropdown.Item
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                >
                   <SwitchMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item>
+                <NavDropdown.Item
+                  style={{ backgroundColor: "transparent", color: "#000" }}
+                >
                   <DeleteMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
               </NavDropdown>
