@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SettingOutlined } from "@ant-design/icons";
+import { message } from "antd";
 
 import AddMember from "../modal/AddMember";
 import EditMember from "../modal/EditMember";
@@ -22,6 +23,7 @@ const Navigation = () => {
   const [selectedUserCountries, setSelectedUserCountries] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [countryToAdd, setCountryToAdd] = useState("");
+  const [modalAction, setModalAction] = useState("add");
 
   const handleSelectUser = (user, color, countries) => {
     setSelectedUser(user);
@@ -35,32 +37,48 @@ const Navigation = () => {
   };
 
   const handleClick = (title) => {
-    setCountryToAdd(title);
-    setShowConfirmation(true);
+    if (selectedUserCountries.includes(title)) {
+      setCountryToAdd(title);
+      setModalAction("remove");
+      setShowConfirmation(true);
+    } else {
+      setCountryToAdd(title);
+      setModalAction("add");
+      setShowConfirmation(true);
+    }
+  };
+
+  const handleConfirmAction = () => {
+    if (modalAction === "add") {
+      addCountryToUser();
+    } else if (modalAction === "remove") {
+      handleDeleteCountry(countryToAdd);
+    }
+    setShowConfirmation(false);
   };
 
   const addCountryToUser = () => {
     const updatedCountries = [...selectedUserCountries, countryToAdd];
     setSelectedUserCountries(updatedCountries);
-    localStorage.setItem(
-      "users",
-      JSON.stringify(
-        updateUserCountriesInLocalStorage(selectedUser, updatedCountries)
-      )
-    );
-    setShowConfirmation(false);
+    updateLocalStorageCountries(selectedUser, updatedCountries);
+    message.success(`${countryToAdd} added successfully.`);
   };
 
-  const updateUserCountriesInLocalStorage = (userName, updatedCountries) => {
+  const handleDeleteCountry = (countryToDelete) => {
+    const updatedCountries = selectedUserCountries.filter(
+      (country) => country !== countryToDelete
+    );
+    setSelectedUserCountries(updatedCountries);
+    updateLocalStorageCountries(selectedUser, updatedCountries);
+    message.success(`${countryToDelete} removed successfully.`);
+  };
+
+  const updateLocalStorageCountries = (userName, updatedCountries) => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const updatedUsers = storedUsers.map((user) => {
-      if (user.name === userName) {
-        return { ...user, countries: updatedCountries };
-      }
-      return user;
-    });
+    const updatedUsers = storedUsers.map((user) =>
+      user.name === userName ? { ...user, countries: updatedCountries } : user
+    );
     localStorage.setItem("users", JSON.stringify(updatedUsers));
-    return updatedUsers;
   };
 
   const getCountryStyle = (title) => {
@@ -134,10 +152,16 @@ const Navigation = () => {
       {/* Confirmation Modal */}
       <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Country Confirmation</Modal.Title>
+          <Modal.Title>
+            {modalAction === "add"
+              ? "Add Country Confirmation"
+              : "Remove Country Confirmation"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Do you want to add {countryToAdd} to your country list?
+          {modalAction === "add"
+            ? `Do you want to add ${countryToAdd} to your country list?`
+            : `Do you want to remove ${countryToAdd} from your country list?`}
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -146,8 +170,8 @@ const Navigation = () => {
           >
             Cancel
           </Button>
-          <Button variant="primary" onClick={addCountryToUser}>
-            Add
+          <Button variant="primary" onClick={handleConfirmAction}>
+            {modalAction === "add" ? "Add" : "Remove"}
           </Button>
         </Modal.Footer>
       </Modal>
