@@ -1,6 +1,9 @@
 .ag-canvas_svg {
   background-color: #90daee;
+  height: 95vh; /* Set initial height to 95% of viewport height */
+  width: 100%; /* Ensure full width */
 }
+
 .ag-canvas_svg path {
   fill: #679c86;
   fill-opacity: 1;

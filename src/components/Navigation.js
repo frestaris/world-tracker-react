@@ -178,19 +178,34 @@ const Navigation = () => {
                 >
                   <AddMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
+                {/* Display EditMember option */}
                 <NavDropdown.Item
                   style={{ backgroundColor: "transparent", color: "#000" }}
+                  disabled={
+                    !localStorage.getItem("users") ||
+                    JSON.parse(localStorage.getItem("users")).length === 0
+                  }
                 >
                   <EditMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
+                {/* Display SwitchMember option */}
                 <NavDropdown.Item
                   style={{ backgroundColor: "transparent", color: "#000" }}
+                  disabled={
+                    !localStorage.getItem("users") ||
+                    JSON.parse(localStorage.getItem("users")).length === 0
+                  }
                 >
                   <SwitchMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
+                {/* Display DeleteMember option */}
                 <NavDropdown.Item
                   style={{ backgroundColor: "transparent", color: "#000" }}
+                  disabled={
+                    !localStorage.getItem("users") ||
+                    JSON.parse(localStorage.getItem("users")).length === 0
+                  }
                 >
                   <DeleteMember onSelectUser={handleSelectUser} />
                 </NavDropdown.Item>
