@@ -9,7 +9,7 @@ const { Option } = Select;
 const colorOptions = [
   { value: "Red", color: "#db2828" },
   { value: "Orange", color: "#f2711c" },
-  { value: "Yellow", color: "#fbbd08" },
+  { value: "Yellow", color: "#E9C46A" },
   { value: "Olive", color: "#b5cc18" },
   { value: "Green", color: "#21ba45" },
   { value: "Teal", color: "#00b5ad" },

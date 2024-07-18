@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -16,8 +17,10 @@ import SwitchMember from "../modal/SwitchMember";
 import User from "../modal/User";
 
 import { countriesData } from "../data";
+import globe from "../globe.png";
 
 const Navigation = () => {
+  const location = useLocation();
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedUserColor, setSelectedUserColor] = useState("");
   const [selectedUserCountries, setSelectedUserCountries] = useState([]);
@@ -25,6 +28,46 @@ const Navigation = () => {
   const [countryToAdd, setCountryToAdd] = useState("");
   const [modalAction, setModalAction] = useState("add");
   const [mapKey, setMapKey] = useState(0); // Key to force re-render of SVG map
+
+  useEffect(() => {
+    // Function to retrieve and set user data from localStorage
+    const fetchUserData = () => {
+      const storedUser = JSON.parse(localStorage.getItem("selectedUser"));
+      if (storedUser && window.location.pathname === `/${storedUser.user}`) {
+        setSelectedUser(storedUser.user);
+        setSelectedUserColor(storedUser.color);
+        setSelectedUserCountries(storedUser.countries);
+      }
+    };
+
+    // Call the function once initially
+    fetchUserData();
+
+    // Add event listener to handle refresh and back/forward navigation
+    const handleStorageChange = () => {
+      fetchUserData();
+    };
+
+    // Subscribe to storage change events
+    window.addEventListener("storage", handleStorageChange);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []); // Dependency array empty to run only once on mount
+
+  useEffect(() => {
+    // Save user data to localStorage whenever it changes
+    localStorage.setItem(
+      "selectedUser",
+      JSON.stringify({
+        user: selectedUser,
+        color: selectedUserColor,
+        countries: selectedUserCountries,
+      })
+    );
+  }, [selectedUser, selectedUserColor, selectedUserCountries]); // Update localStorage on changes
 
   const handleSelectUser = (user, color, countries) => {
     setSelectedUser(user);
@@ -93,18 +136,32 @@ const Navigation = () => {
       : { cursor: "pointer" };
   };
 
+  const isUserActive = selectedUser !== null && location.pathname !== "/";
+
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary fixed-top">
         <Container>
-          <Navbar.Brand href="/">World Tracker</Navbar.Brand>
-          <User
-            selectedUser={selectedUser}
-            color={selectedUserColor}
-            countries={selectedUserCountries}
-            onUpdateCountries={setSelectedUserCountries} // Pass the setter function
-            onUpdateUser={handleUpdateUser}
+          <img
+            src={globe}
+            alt="Globe"
+            className="d-inline-block align-top"
+            style={{ height: "30px", marginRight: "10px" }}
           />
+          <Navbar.Brand href="/">World Tracker</Navbar.Brand>
+          {selectedUser ? (
+            <User
+              selectedUser={selectedUser}
+              color={selectedUserColor}
+              countries={selectedUserCountries}
+              onUpdateCountries={setSelectedUserCountries} // Pass the setter function
+              onUpdateUser={handleUpdateUser}
+            />
+          ) : (
+            <div className="text-muted">
+              | Create a Member to Start your Journey... |
+            </div>
+          )}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
@@ -154,7 +211,7 @@ const Navigation = () => {
             id={country.id}
             title={country.title}
             d={country.d}
-            onClick={() => handleClick(country.title)}
+            onClick={isUserActive ? () => handleClick(country.title) : null}
             style={getCountryStyle(country.title)}
           />
         ))}
@@ -174,9 +231,16 @@ const Navigation = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {modalAction === "add"
-            ? `Do you want to add ${countryToAdd} to your country list?`
-            : `Do you want to remove ${countryToAdd} from your country list?`}
+          {modalAction === "add" ? (
+            <span>
+              Do you want to add <b>{countryToAdd}</b> to your country list?
+            </span>
+          ) : (
+            <span>
+              Do you want to remove <b>{countryToAdd}</b> from your country
+              list?
+            </span>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -185,7 +249,10 @@ const Navigation = () => {
           >
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleConfirmAction}>
+          <Button
+            variant={modalAction === "add" ? "success" : "danger"}
+            onClick={handleConfirmAction}
+          >
             {modalAction === "add" ? "Add" : "Remove"}
           </Button>
         </Modal.Footer>
